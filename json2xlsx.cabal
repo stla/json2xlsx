@@ -1,0 +1,57 @@
+name:                json2xlsx
+version:             0.1.0.0
+-- synopsis:
+-- description:
+homepage:            https://github.com/stla/json2xlsx#readme
+license:             GPL-3
+license-file:        LICENSE
+author:              Stéphane Laurent
+maintainer:          laurent_step@yahoo.fr
+copyright:           2017 Stéphane Laurent
+category:            Spreadsheet
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+source-repository head
+  type:     git
+  location: https://github.com/stla/json2xlsx
+
+flag exe
+  description:
+    Build the executable.
+  default: False
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     JSONtoCellMap
+                     , JSONtoCellMap.Types
+                     , JSONtoCellMap.Internal
+                     , WriteXLSX
+  build-depends:       base >= 4.7 && < 5
+                     , aeson
+                     , containers
+                     , unordered-containers
+                     , xlsx
+                     , utf8-string
+                     , text
+                     , lens
+                     , scientific
+                     , bytestring
+                     , time
+  default-language:    Haskell2010
+  ghc-options:        -fwarn-unused-imports
+
+executable writexlsx
+  if flag(exe)
+    buildable: True
+  else
+    buildable: False
+  hs-source-dirs:      src-commandline
+  main-is:             Main.hs
+  ghc-options:        -fwarn-unused-imports -optc-Os
+  other-modules:
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , json2xlsx
+                     , optparse-applicative
