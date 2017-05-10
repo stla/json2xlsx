@@ -3,12 +3,15 @@
 
 module JSONtoCellMap.Types
   where
-import           Codec.Xlsx           (Cell, def, Font)
+import           Codec.Xlsx           (Cell, Font, def)
 import           Codec.Xlsx.Formatted
 import           Data.Aeson           (FromJSON, Value)
 import           Data.HashMap.Lazy    (HashMap)
+import           Data.Map.Lazy        (Map)
 import           Data.Text            (Text)
 import           GHC.Generics
+
+type FormattedCellMap = Map (Int, Int) FormattedCell
 
 emptyCell :: Cell
 emptyCell = def
@@ -29,9 +32,9 @@ data SimpleFormat = SimpleFormat {
                     deriving (Show, Generic, FromJSON, Eq)
 
 data SimpleFont = SimpleFont {
-                               bold :: Maybe Bool,
+                               bold   :: Maybe Bool,
                                family :: Maybe Text,
-                               name :: Maybe Text
+                               name   :: Maybe Text
                              }
                   deriving (Show, Generic, FromJSON, Eq)
 
