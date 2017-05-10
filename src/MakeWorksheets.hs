@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Chaining
+module MakeWorksheets
   where
 import Codec.Xlsx
 import Codec.Xlsx.Formatted
 import Data.Map.Lazy (Map)
 import Control.Lens (set)
-import WriteXLSX (jsonToFormattedCellMap, jjj, jjj2)
+import JSONtoCellMap (jsonToFormattedCellMap)
 import           Data.Time.Clock.POSIX     (getPOSIXTime)
 import qualified Data.ByteString.Lazy      as L
 
@@ -14,8 +14,8 @@ type FormattedCellMap = Map (Int, Int) FormattedCell
 emptyWorksheet :: Worksheet
 emptyWorksheet = def
 
-chaining :: [FormattedCellMap] -> (StyleSheet, [Worksheet])
-chaining fcellmaps =
+makeWorksheets :: [FormattedCellMap] -> (StyleSheet, [Worksheet])
+makeWorksheets fcellmaps =
   case length fcellmaps of
     1 -> (stylesheet, [ws])
       where ws = set wsMerges (formattedMerges frmt) $
@@ -27,9 +27,13 @@ chaining fcellmaps =
                    set wsCells (formattedCellMap frmt) emptyWorksheet
             stylesheet = formattedStyleSheet frmt
             frmt = formatted fcellmap (fst previous)
-            previous = chaining (take (l-1) fcellmaps)
+            previous = makeWorksheets (take (l-1) fcellmaps)
             fcellmap = last fcellmaps
             l = length fcellmaps
+
+jjj,jjj2 :: String
+jjj = "{\"A1\":{\"value\":2,\"format\":{\"numberFormat\":\"Nf2Decimal\",\"font\":{\"bold\":true}}},\"B2\":{\"value\":1000,\"format\":{\"numberFormat\":\"yyyy-mm-dd;@\"}},\"A3\":{\"value\":\"abc\",\"format\":{\"font\":{\"family\":\"Script\",\"name\":\"Courier\"}}}}"
+jjj2 = "{\"A1\":{\"value\":3,\"format\":{\"numberFormat\":\"Nf2Decimal\"}}}"
 
 fcellmap1, fcellmap2 :: FormattedCellMap
 fcellmap1 = jsonToFormattedCellMap jjj
@@ -40,8 +44,8 @@ emptyXlsx = def
 
 test :: IO ()
 test = do
-  let (stylesheet, worksheets) = chaining [fcellmap1, fcellmap2]
+  let (stylesheet, worksheets) = makeWorksheets [fcellmap1, fcellmap2]
   ct <- getPOSIXTime
   let xlsx = set xlStyles (renderStyleSheet stylesheet) $
-               set xlSheets [("Sheet1", worksheets !! 0), ("Sheet2", worksheets !! 1)] emptyXlsx
+               set xlSheets [("Sheet1", head worksheets), ("Sheet2", worksheets !! 1)] emptyXlsx
   L.writeFile "testTwoSheets.xlsx" (fromXlsx ct xlsx)

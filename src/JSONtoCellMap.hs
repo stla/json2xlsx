@@ -11,7 +11,12 @@ import           JSONtoCellMap.Types
 -- import qualified Data.Map.Lazy             as DM
 import           Control.Lens           (set)
 -- import           Data.ByteString.Lazy.UTF8 (fromString)
-import           Data.Maybe             (fromMaybe)
+import           Data.Maybe             (fromMaybe, fromJust)
+import qualified Data.HashMap.Lazy         as DHM
+import qualified Data.Map.Lazy             as DM
+import           Data.Aeson                (decode)
+import           Data.ByteString.Lazy.UTF8 (fromString)
+
 
 -- for testing
 jj :: String
@@ -71,12 +76,13 @@ simpleCellToFormattedCell scell =
                    emptyFormat
             where formatscell = fromMaybe emptySimpleFormat (format scell)
 
--- -- Get CellMap, [Range] and StyleSheet
--- almostDone :: Formatted
--- almostDone = formatted formattedcellmap minimalStyleSheet
--- ws :: Worksheet
--- ws = set wsMerges (formattedMerges almostDone) $
---        set wsCells (formattedCellMap almostDone) emptyWorksheet
--- xlsx :: Xlsx
--- xlsx = set xlStyles (renderStyleSheet (formattedStyleSheet almostDone)) $
---          set xlSheets [("Sheet1", ws)] emptyXlsx
+simpleCellMapToFormattedCellMap :: SimpleCellMap -> FormattedCellMap
+simpleCellMapToFormattedCellMap simplecellmap =
+  DM.map simpleCellToFormattedCell $
+    DM.mapKeys (\c -> fromJust $ fromSingleCellRef CellRef {unCellRef = c}) $
+      DM.fromList $ DHM.toList simplecellmap
+
+jsonToFormattedCellMap :: String -> FormattedCellMap
+jsonToFormattedCellMap jsonString =
+  simpleCellMapToFormattedCellMap $ 
+        fromJust (decode (fromString jsonString) :: Maybe SimpleCellMap)
