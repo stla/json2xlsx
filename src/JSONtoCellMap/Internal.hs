@@ -4,7 +4,7 @@ module JSONtoCellMap.Internal
 import           Codec.Xlsx          (CellValue (..), Font (..),
                                       FontFamily (..), ImpliedNumberFormat (..),
                                       NumberFormat (..), fontBold, fontFamily,
-                                      fontName)
+                                      fontName, Color(..), fontColor, colorARGB)
 import           Control.Lens        (set)
 import           Data.Aeson          (Value (..))
 import           Data.Maybe          (fromJust, isNothing)
@@ -37,13 +37,21 @@ textToFontFamily x
   | x == Just "NotApplicable" = Just FontFamilyNotApplicable
   | otherwise = Nothing
 
+-- rgba color: https://css-tricks.com/8-digit-hex-codes/
+textToColor :: Maybe Text -> Maybe Color
+textToColor argb = Just $ set colorARGB argb emptyColor
+
 simpleFontToFont :: Maybe SimpleFont -> Maybe Font
 simpleFontToFont sfont =
-  Just $ set fontName fname $
+  Just $
+    set fontColor (textToColor fcolor) $
+    set fontName fname $
     set fontFamily (textToFontFamily ffamily) (fromJust font)
-    where font = maybe (Just emptyFont) (\x -> Just (set fontBold (bold x) emptyFont)) sfont
+    where font    = maybe (Just emptyFont) 
+                          (\x -> Just (set fontBold (bold x) emptyFont)) sfont
           ffamily = maybe Nothing family sfont
-          fname = maybe Nothing name sfont
+          fname   = maybe Nothing name sfont
+          fcolor  = maybe Nothing color sfont
   -- if isNothing ffamily
   --   then
   --     font

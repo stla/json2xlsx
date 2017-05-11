@@ -3,7 +3,7 @@
 
 module JSONtoCellMap.Types
   where
-import           Codec.Xlsx           (Cell, Font, def)
+import           Codec.Xlsx           (Cell, Font, def, Color)
 import           Codec.Xlsx.Formatted
 import           Data.Aeson           (FromJSON, Value)
 import           Data.HashMap.Lazy    (HashMap)
@@ -24,6 +24,8 @@ emptyFormat = _formattedFormat emptyFormattedCell
 emptyFont :: Font
 emptyFont = def
 
+emptyColor :: Color
+emptyColor = def
 
 data SimpleFormat = SimpleFormat {
                                     numberFormat :: Maybe Text,
@@ -34,15 +36,26 @@ data SimpleFormat = SimpleFormat {
 data SimpleFont = SimpleFont {
                                bold   :: Maybe Bool,
                                family :: Maybe Text,
-                               name   :: Maybe Text
+                               name   :: Maybe Text,
+                               color  :: Maybe Text
                              }
                   deriving (Show, Generic, FromJSON, Eq)
 
 emptySimpleFont :: SimpleFont
-emptySimpleFont = SimpleFont {bold= Nothing, family= Nothing, name=Nothing}
+emptySimpleFont = SimpleFont
+                  {
+                    bold   = Nothing,
+                    family = Nothing,
+                    name   = Nothing,
+                    color  = Nothing
+                  }
 
 emptySimpleFormat :: SimpleFormat
-emptySimpleFormat = SimpleFormat {numberFormat=Nothing, font=Nothing}
+emptySimpleFormat = SimpleFormat
+                    {
+                      numberFormat = Nothing,
+                      font         = Nothing
+                    }
 
 data SimpleCell = SimpleCell {
                              value  :: Value,
