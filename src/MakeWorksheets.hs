@@ -4,7 +4,7 @@ module MakeWorksheets
 import Codec.Xlsx
 import Codec.Xlsx.Formatted
 import Data.Map.Lazy (Map)
-import Control.Lens (set)
+import Control.Lens (set, (.~), (&))
 import JSONtoCellMap (jsonToFormattedCellMap)
 import           Data.Time.Clock.POSIX     (getPOSIXTime)
 import qualified Data.ByteString.Lazy      as L
@@ -15,21 +15,29 @@ emptyWorksheet :: Worksheet
 emptyWorksheet = def
 
 makeWorksheets :: [FormattedCellMap] -> (StyleSheet, [Worksheet])
-makeWorksheets fcellmaps =
-  case length fcellmaps of
-    1 -> (stylesheet, [ws])
-      where ws = set wsMerges (formattedMerges frmt) $
-                   set wsCells (formattedCellMap frmt) emptyWorksheet
-            stylesheet = formattedStyleSheet frmt
-            frmt = formatted (head fcellmaps) minimalStyleSheet
-    _ -> (stylesheet, snd previous ++ [ws])
-      where ws = set wsMerges (formattedMerges frmt) $
-                   set wsCells (formattedCellMap frmt) emptyWorksheet
-            stylesheet = formattedStyleSheet frmt
-            frmt = formatted fcellmap (fst previous)
-            previous = makeWorksheets (take (l-1) fcellmaps)
-            fcellmap = last fcellmaps
-            l = length fcellmaps
+makeWorksheets = foldr formatSingle (minimalStyleSheet, []) 
+  where
+    formatSingle fcells (ssheet, wss) =
+       let fmt = formatted fcells ssheet
+           ws = def & wsCells .~ formattedCellMap fmt
+                    & wsMerges .~ formattedMerges fmt
+       in (formattedStyleSheet fmt, ws : wss)
+
+-- makeWorksheets fcellmaps =
+--   case length fcellmaps of
+--     1 -> (stylesheet, [ws])
+--       where ws = set wsMerges (formattedMerges frmt) $
+--                    set wsCells (formattedCellMap frmt) emptyWorksheet
+--             stylesheet = formattedStyleSheet frmt
+--             frmt = formatted (head fcellmaps) minimalStyleSheet
+--     _ -> (stylesheet, snd previous ++ [ws])
+--       where ws = set wsMerges (formattedMerges frmt) $
+--                    set wsCells (formattedCellMap frmt) emptyWorksheet
+--             stylesheet = formattedStyleSheet frmt
+--             frmt = formatted fcellmap (fst previous)
+--             previous = makeWorksheets (take (l-1) fcellmaps)
+--             fcellmap = last fcellmaps
+--             l = length fcellmaps
 
 jjj,jjj2 :: String
 jjj = "{\"A1\":{\"value\":2,\"format\":{\"numberFormat\":\"Nf2Decimal\",\"font\":{\"bold\":true}}},\"B2\":{\"value\":1000,\"format\":{\"numberFormat\":\"yyyy-mm-dd;@\"}},\"A3\":{\"value\":\"abc\",\"format\":{\"font\":{\"family\":\"Script\",\"name\":\"Courier\"}}}}"
