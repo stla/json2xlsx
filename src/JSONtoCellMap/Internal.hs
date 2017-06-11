@@ -4,7 +4,8 @@ module JSONtoCellMap.Internal
 import           Codec.Xlsx          (CellValue (..), Font (..),
                                       FontFamily (..), ImpliedNumberFormat (..),
                                       NumberFormat (..), fontBold, fontFamily,
-                                      fontName, Color(..), fontColor, colorARGB)
+                                      fontName, Color(..), fontColor, colorARGB,
+                                      Comment (..), XlsxText (..))
 import           Control.Lens        (set)
 import           Data.Aeson          (Value (..))
 import           Data.Maybe          (fromJust, isNothing)
@@ -23,7 +24,13 @@ valueToCellValue value =
 textToNumberFormat :: Maybe Text -> Maybe NumberFormat
 textToNumberFormat x
   | isNothing x = Nothing
+  | x == Just "NfGeneral" = Just (StdNumberFormat NfGeneral)
+  | x == Just "NfZero" = Just (StdNumberFormat NfZero)
   | x == Just "Nf2Decimal" = Just (StdNumberFormat Nf2Decimal)
+  | x == Just "NfMax3Decimal" = Just (StdNumberFormat NfMax3Decimal)
+  | x == Just "NfThousandSeparator2Decimal" = Just (StdNumberFormat NfThousandSeparator2Decimal)
+  | x == Just "NfPercent" = Just (StdNumberFormat NfPercent)
+  | x == Just "NfPercent2Decimal" = Just (StdNumberFormat NfPercent2Decimal)
   | otherwise = Just (UserNumberFormat (fromJust x))
 
 textToFontFamily :: Maybe Text -> Maybe FontFamily
@@ -47,7 +54,7 @@ simpleFontToFont sfont =
     set fontColor (textToColor fcolor) $
     set fontName fname $
     set fontFamily (textToFontFamily ffamily) (fromJust font)
-    where font    = maybe (Just emptyFont) 
+    where font    = maybe (Just emptyFont)
                           (\x -> Just (set fontBold (bold x) emptyFont)) sfont
           ffamily = maybe Nothing family sfont
           fname   = maybe Nothing name sfont
@@ -59,3 +66,13 @@ simpleFontToFont sfont =
   --     Just $ set fontFamily (textToFontFamily ffamily) (fromJust font)
   --   where font = maybe (Just emptyFont) (\x -> Just (set fontBold (bold x) emptyFont)) sfont
   --         ffamily = maybe Nothing family sfont
+
+textToComment :: Maybe Text -> Maybe Comment
+textToComment comment
+  | isNothing comment = Nothing
+  | otherwise = Just Comment
+                  {
+                    _commentText = XlsxText (fromJust comment),
+                    _commentAuthor = "xlsx",
+                    _commentVisible = False
+                  }

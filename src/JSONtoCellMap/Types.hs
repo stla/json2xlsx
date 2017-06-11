@@ -59,7 +59,8 @@ emptySimpleFormat = SimpleFormat
 
 data SimpleCell = SimpleCell {
                              value  :: Value,
-                             format :: Maybe SimpleFormat
+                             format :: Maybe SimpleFormat,
+                             comment :: Maybe Text
                            }
        deriving (Show, Generic, FromJSON)
 

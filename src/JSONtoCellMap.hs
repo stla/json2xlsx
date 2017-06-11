@@ -65,7 +65,8 @@ jj = "{\"A1\":{\"value\":2,\"format\":{\"numberFormat\":\"Nf2Decimal\",\"font\":
 simpleCellToFormattedCell :: SimpleCell -> FormattedCell
 simpleCellToFormattedCell scell =
   set formattedCell cell (set formattedFormat f emptyFormattedCell)
-  where cell = set cellValue (valueToCellValue (value scell)) emptyCell
+  where cell = set cellComment (textToComment (comment scell)) $ 
+                set cellValue (valueToCellValue (value scell)) emptyCell
         f = if formatscell == emptySimpleFormat
               then
                 emptyFormat
@@ -84,5 +85,5 @@ simpleCellMapToFormattedCellMap simplecellmap =
 
 jsonToFormattedCellMap :: String -> FormattedCellMap
 jsonToFormattedCellMap jsonString =
-  simpleCellMapToFormattedCellMap $ 
+  simpleCellMapToFormattedCellMap $
         fromJust (decode (fromString jsonString) :: Maybe SimpleCellMap)
