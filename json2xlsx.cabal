@@ -29,6 +29,7 @@ library
                      , JSONtoCellMap.Internal
                      , WriteXLSX
                      , MakeWorksheets
+                     , ColorsRGB
   build-depends:       base >= 4.7 && < 5
                      , aeson
                      , containers

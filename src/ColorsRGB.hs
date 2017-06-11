@@ -1,9 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Colors
+module ColorsRGB
   where
-import Numeric (showHex)
-import Data.Text (Text)
+import           Data.Text (Text)
 import qualified Data.Text as T
+import           Numeric   (showHex)
 
 colorToRGB0 :: Text -> [Int]
 colorToRGB0 color
@@ -665,7 +665,11 @@ colorToRGB0 color
   | color == "yellow4" = [139, 139, 0]
   | color == "yellowgreen" = [154, 205, 50]
 
+toHex :: Int -> Text
+toHex x
+  | x > 15 = (T.toUpper . T.pack) $ showHex x ""
+  | otherwise = (T.toUpper . T.pack) $ '0' : showHex x ""
+
 colorToARGB :: Text -> Text
 colorToARGB color =
-  T.concat $ "FF" : map (\i -> (T.toUpper . T.pack) (showHex i ""))
-                        (colorToRGB0 color)
+  T.concat $ "FF" : map toHex (colorToRGB0 color)

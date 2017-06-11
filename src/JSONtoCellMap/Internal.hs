@@ -1,11 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 module JSONtoCellMap.Internal
   where
-import           Codec.Xlsx          (CellValue (..), Font (..),
-                                      FontFamily (..), ImpliedNumberFormat (..),
-                                      NumberFormat (..), fontBold, fontFamily,
-                                      fontName, Color(..), fontColor, colorARGB,
-                                      Comment (..), XlsxText (..))
+import           Codec.Xlsx          (CellValue (..), Color (..), Comment (..),
+                                      Font (..), FontFamily (..),
+                                      ImpliedNumberFormat (..),
+                                      NumberFormat (..), XlsxText (..),
+                                      colorARGB, fontBold, fontColor,
+                                      fontFamily, fontName)
+import           ColorsRGB           (colorToARGB)
 import           Control.Lens        (set)
 import           Data.Aeson          (Value (..))
 import           Data.Maybe          (fromJust, isNothing)
@@ -46,7 +48,9 @@ textToFontFamily x
 
 -- rgba color: https://css-tricks.com/8-digit-hex-codes/
 textToColor :: Maybe Text -> Maybe Color
-textToColor argb = Just $ set colorARGB argb emptyColor
+textToColor color
+  | isNothing color = Nothing
+  | otherwise = Just $ set colorARGB (fmap colorToARGB color) emptyColor
 
 simpleFontToFont :: Maybe SimpleFont -> Maybe Font
 simpleFontToFont sfont =
