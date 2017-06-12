@@ -30,7 +30,7 @@ library
                      , WriteXLSX
                      , MakeWorksheets
                      , ColorsRGB
-                     , Pictures.DrawingPicture
+                     , Pictures.DrawingPictures
   build-depends:       base >= 4.7 && < 5
                      , aeson
                      , containers
