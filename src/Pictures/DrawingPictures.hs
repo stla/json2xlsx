@@ -6,6 +6,7 @@ import           Control.Lens
 -- import           Data.ByteString.Lazy (ByteString)
 import           Control.Monad        (zipWithM)
 import qualified Data.ByteString.Lazy as B
+import System.FilePath.Posix (takeFileName)
 
 defaultShapeProperties :: ShapeProperties
 defaultShapeProperties =
@@ -26,7 +27,7 @@ xdrAnchor imageFile coordinates = do
   image <- B.readFile imageFile
   let fileInfo = FileInfo
                  {
-                   _fiFilename = "image1.png",
+                   _fiFilename = takeFileName imageFile,
                    _fiContentType = "image/png",
                    _fiContents = image
                  }
