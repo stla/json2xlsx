@@ -31,6 +31,7 @@ library
                      , MakeWorksheets
                      , ColorsRGB
                      , Pictures.DrawingPictures
+                     , Pictures.PictureData
   build-depends:       base >= 4.7 && < 5
                      , aeson
                      , containers
