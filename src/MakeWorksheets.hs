@@ -15,12 +15,23 @@ emptyWorksheet :: Worksheet
 emptyWorksheet = def
 
 makeWorksheets :: [FormattedCellMap] -> (StyleSheet, [Worksheet])
-makeWorksheets = foldr formatSingle (minimalStyleSheet, []) 
+makeWorksheets = foldr formatSingle (minimalStyleSheet, [])
   where
     formatSingle fcells (ssheet, wss) =
        let fmt = formatted fcells ssheet
            ws = def & wsCells .~ formattedCellMap fmt
                     & wsMerges .~ formattedMerges fmt
+       in (formattedStyleSheet fmt, ws : wss)
+--
+makeWorksheets2 :: [(FormattedCellMap, Maybe Drawing)] -> (StyleSheet, [Worksheet])
+makeWorksheets2 =
+  foldr formatSingle (minimalStyleSheet, [])
+  where
+    formatSingle (fcells, drawing) (ssheet, wss) =
+       let fmt = formatted fcells ssheet
+           ws = def & wsCells   .~ formattedCellMap fmt
+                    & wsMerges  .~ formattedMerges fmt
+                    & wsDrawing .~ drawing
        in (formattedStyleSheet fmt, ws : wss)
 
 -- makeWorksheets fcellmaps =

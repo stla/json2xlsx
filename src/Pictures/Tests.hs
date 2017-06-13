@@ -11,6 +11,18 @@ import Data.Maybe (fromJust)
 import Data.Scientific (toBoundedInteger)
 import Data.Text (Text)
 import           GHC.Generics
+import qualified Data.Map as M
+import Data.Map.Lazy (Map)
+
+m1 :: Map String [Int]
+m1 = M.fromList [("a", [1]), ("b", [1,2])]
+m2 :: Map String (Maybe Double)
+m2 = M.fromList [("b", Just 5.0), ("c", Just 5.5)]
+
+m1m2 :: Map String ([Int], Maybe Double)
+m1m2 = M.mergeWithKey (\k x y -> Just (x, y)) (M.map (\x -> (x, Nothing)))
+  (M.map (\y -> ([], y))) m1 m2
+
 
 data PictureData = PictureData
                     {
