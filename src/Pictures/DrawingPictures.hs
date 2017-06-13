@@ -18,22 +18,26 @@ defaultShapeProperties =
                     _spOutline  = Nothing
                   }
 
+cantorPairing :: (Int, Int) -> Int
+cantorPairing (a,b) = div ((a+b)*(a+b+1)) 2 + a
+
 xdrAnchor :: PictureData -> IO (Anchor FileInfo ChartSpace)
 xdrAnchor pictureData = do
   image <- B.readFile imageFile
   let fileInfo = FileInfo
                  {
-                   _fiFilename = takeFileName imageFile,
+                   _fiFilename = show id ++ takeFileName imageFile,
                    _fiContentType = "image/png",
                    _fiContents = image
                  }
       anchor = simpleAnchorXY (leftcorner, topcorner) (positiveSize2D cx cy) $
-                  picture DrawingElementId{unDrawingElementId = 1} fileInfo
+                  picture DrawingElementId{unDrawingElementId = id} fileInfo
       pic = set picShapeProperties defaultShapeProperties (_anchObject anchor)
   return $ set anchObject pic anchor
   where imageFile  = file pictureData
         topcorner = top pictureData - 1
         leftcorner = left pictureData - 1
+        id = cantorPairing (topcorner, leftcorner)
         cx = toInteger $ 9525 * width pictureData
         cy = toInteger $ 9525 * height pictureData
 

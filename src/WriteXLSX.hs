@@ -127,3 +127,14 @@ jjpics2 = "{\"Sheet2\":[{\"file\":\"image.png\",\"left\":2,\"top\":3,\"width\":2
 
 thethetest :: IO()
 thethetest = writeXlsx3 jjj6 jjpics2 "thethetest.xlsx"
+
+-- tester plusieurs images (le id !)
+jjpics3 = "{\"Sheet1\":[{\"file\":\"image.png\",\"left\":3,\"top\":3,\"width\":200,\"height\":300}],\"Sheet2\":[{\"file\":\"image.png\",\"left\":2,\"top\":3,\"width\":200,\"height\":300},{\"file\":\"image2.png\",\"left\":12,\"top\":3,\"width\":200,\"height\":300}]}"
+thethetest2 :: IO()
+thethetest2 = writeXlsx3 jjj6 jjpics3 "thethetest2.xlsx"
+-- après différents id ça fait toujours repair... attends non ils ne sont pas différents là
+-- OK c'est le filename !
+
+jjpics4 = "{\"Sheet2\":[{\"file\":\"image.png\",\"left\":2,\"top\":3,\"width\":200,\"height\":300},{\"file\":\"image2.png\",\"left\":12,\"top\":3,\"width\":200,\"height\":300}]}"
+thethetest3 :: IO()
+thethetest3 = writeXlsx3 jjj6 jjpics4 "thethetest3.xlsx"
