@@ -24,14 +24,15 @@ flag exe
 
 library
   hs-source-dirs:      src
-  exposed-modules:     JSONtoCellMap
-                     , JSONtoCellMap.Types
-                     , JSONtoCellMap.Internal
-                     , WriteXLSX
-                     , MakeWorksheets
-                     , ColorsRGB
-                     , Pictures.DrawingPictures
-                     , Pictures.PictureData
+  exposed-modules:     JSONtoXLSX.JSONtoCellMap
+                     , JSONtoXLSX.JSONtoCellMap.Types
+                     , JSONtoXLSX.JSONtoCellMap.Conversions
+                     , JSONtoXLSX
+                     , JSONtoXLSX.MakeWorksheets
+                     , JSONtoXLSX.JSONtoCellMap.ColorsRGB
+                     , JSONtoXLSX.Pictures
+                     , JSONtoXLSX.Pictures.DrawingPictures
+                     , JSONtoXLSX.Pictures.PictureData
   build-depends:       base >= 4.7 && < 5
                      , aeson
                      , containers

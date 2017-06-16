@@ -1,18 +1,18 @@
+{-# LANGUAGE DeriveAnyClass    #-}
+{-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE DeriveGeneric  #-}
-{-# LANGUAGE DeriveAnyClass  #-}
 
-module Pictures.Tests
+module JSONtoXLSX.Pictures.Tests
   where
-import Data.Aeson
+import           Data.Aeson
 import           Data.ByteString.Lazy.UTF8 (fromString)
-import qualified Data.HashMap.Lazy as HM
-import Data.Maybe (fromJust)
-import Data.Scientific (toBoundedInteger)
-import Data.Text (Text)
+import qualified Data.HashMap.Lazy         as HM
+import qualified Data.Map                  as M
+import           Data.Map.Lazy             (Map)
+import           Data.Maybe                (fromJust)
+import           Data.Scientific           (toBoundedInteger)
+import           Data.Text                 (Text)
 import           GHC.Generics
-import qualified Data.Map as M
-import Data.Map.Lazy (Map)
 
 m1 :: Map String [Int]
 m1 = M.fromList [("a", [1]), ("b", [1,2])]
@@ -26,10 +26,10 @@ m1m2 = M.mergeWithKey (\k x y -> Just (x, y)) (M.map (\x -> (x, Nothing)))
 
 data PictureData = PictureData
                     {
-                     file :: FilePath,
-                     left :: Int,
-                     top :: Int,
-                     width :: Int,
+                     file   :: FilePath,
+                     left   :: Int,
+                     top    :: Int,
+                     width  :: Int,
                      height :: Int
                     }
                    deriving (Show, Generic, FromJSON, Eq)

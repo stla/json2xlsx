@@ -1,21 +1,21 @@
 -- {-# LANGUAGE OverloadedStrings #-}
-module JSONtoCellMap
+module JSONtoXLSX.JSONtoCellMap
   where
 import           Codec.Xlsx
 import           Codec.Xlsx.Formatted
 -- import           Data.Aeson               (decode)
-import           JSONtoCellMap.Internal
-import           JSONtoCellMap.Types
+import           JSONtoXLSX.JSONtoCellMap.Conversions
+import           JSONtoXLSX.JSONtoCellMap.Types
 -- import qualified Data.HashMap.Lazy         as DHM
 -- import           Data.Map.Lazy             (Map)
 -- import qualified Data.Map.Lazy             as DM
-import           Control.Lens           (set)
+import           Control.Lens                         (set)
 -- import           Data.ByteString.Lazy.UTF8 (fromString)
-import           Data.Maybe             (fromMaybe, fromJust)
-import qualified Data.HashMap.Lazy         as DHM
-import qualified Data.Map.Lazy             as DM
-import           Data.Aeson                (decode)
-import           Data.ByteString.Lazy.UTF8 (fromString)
+import           Data.Aeson                           (decode)
+import           Data.ByteString.Lazy.UTF8            (fromString)
+import qualified Data.HashMap.Lazy                    as DHM
+import qualified Data.Map.Lazy                        as DM
+import           Data.Maybe                           (fromJust, fromMaybe)
 
 
 -- for testing
@@ -65,7 +65,7 @@ jj = "{\"A1\":{\"value\":2,\"format\":{\"numberFormat\":\"Nf2Decimal\",\"font\":
 simpleCellToFormattedCell :: SimpleCell -> FormattedCell
 simpleCellToFormattedCell scell =
   set formattedCell cell (set formattedFormat f emptyFormattedCell)
-  where cell = set cellComment (textToComment (comment scell)) $ 
+  where cell = set cellComment (textToComment (comment scell)) $
                 set cellValue (valueToCellValue (value scell)) emptyCell
         f = if formatscell == emptySimpleFormat
               then

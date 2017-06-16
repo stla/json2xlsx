@@ -1,9 +1,9 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric  #-}
 
-module JSONtoCellMap.Types
+module JSONtoXLSX.JSONtoCellMap.Types
   where
-import           Codec.Xlsx           (Cell, Font, def, Color)
+import           Codec.Xlsx           (Cell, Color, Font, def)
 import           Codec.Xlsx.Formatted
 import           Data.Aeson           (FromJSON, Value)
 import           Data.HashMap.Lazy    (HashMap)
@@ -58,8 +58,8 @@ emptySimpleFormat = SimpleFormat
                     }
 
 data SimpleCell = SimpleCell {
-                             value  :: Value,
-                             format :: Maybe SimpleFormat,
+                             value   :: Value,
+                             format  :: Maybe SimpleFormat,
                              comment :: Maybe Text
                            }
        deriving (Show, Generic, FromJSON)

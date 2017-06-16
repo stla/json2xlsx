@@ -1,19 +1,19 @@
+{-# LANGUAGE DeriveAnyClass    #-}
+{-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE DeriveGeneric  #-}
-{-# LANGUAGE DeriveAnyClass  #-}
 
-module Pictures.PictureData
+module JSONtoXLSX.Pictures.PictureData
   where
-import Data.Aeson
+import           Data.Aeson
 import           Data.ByteString.Lazy.UTF8 (fromString)
 import           GHC.Generics
 
 data PictureData = PictureData
                     {
-                     file :: FilePath,
-                     left :: Int,
-                     top :: Int,
-                     width :: Int,
+                     file   :: FilePath,
+                     left   :: Int,
+                     top    :: Int,
+                     width  :: Int,
                      height :: Int
                     }
                    deriving (Show, Generic, FromJSON, Eq)

@@ -1,26 +1,26 @@
 {-# LANGUAGE OverloadedStrings #-}
-module WriteXLSX
+module JSONtoXLSX
   where
 import           Codec.Xlsx
 import           Codec.Xlsx.Formatted
-import           Control.Lens              (set)
-import           Data.Aeson                (decode)
-import qualified Data.ByteString.Lazy      as L
-import           Data.ByteString.Lazy.UTF8 (fromString)
+import           Control.Lens                    (set)
+import           Data.Aeson                      (decode)
+import qualified Data.ByteString.Lazy            as L
+import           Data.ByteString.Lazy.UTF8       (fromString)
 -- import qualified Data.HashMap.Lazy         as DHM
-import           Data.Map.Lazy             (Map)
-import qualified Data.Map.Lazy             as M
-import           Data.Maybe                (fromJust)
+import           Data.Map.Lazy                   (Map)
+import qualified Data.Map.Lazy                   as M
+import           Data.Maybe                      (fromJust)
 -- import           Data.Text                 (Text)
-import           Data.Text                 (Text)
-import           Data.Time.Clock.POSIX     (getPOSIXTime)
-import qualified Data.Traversable          as T
-import           JSONtoCellMap             (jsonToFormattedCellMap,
-                                            simpleCellMapToFormattedCellMap)
-import           JSONtoCellMap.Types       (SimpleCellMap)
-import           MakeWorksheets            (makeWorksheets, makeWorksheets2)
-import           Pictures.DrawingPictures  (drawingPictures)
-import           Pictures.PictureData      (PictureData (..))
+import           Data.Text                       (Text)
+import           Data.Time.Clock.POSIX           (getPOSIXTime)
+import qualified Data.Traversable                as T
+import           JSONtoXLSX.JSONtoCellMap        (jsonToFormattedCellMap, simpleCellMapToFormattedCellMap)
+import           JSONtoXLSX.JSONtoCellMap.Types  (SimpleCellMap)
+import           JSONtoXLSX.MakeWorksheets       (makeWorksheets,
+                                                  makeWorksheets2)
+import           JSONtoXLSX.Pictures             (drawingPictures)
+import           JSONtoXLSX.Pictures.PictureData (PictureData (..))
 
 jjj,jjj2,jjj3,jjj4,jjj5,jjj6 :: String
 jjj = "{\"A1\":{\"value\":2,\"format\":{\"numberFormat\":\"2Decimal\",\"font\":{\"bold\":true}}},\"B2\":{\"value\":1000,\"format\":{\"numberFormat\":\"yyyy-mm-dd;@\"}},\"A3\":{\"value\":\"abc\",\"format\":{\"font\":{\"family\":\"Script\",\"name\":\"Courier\"}}}}"

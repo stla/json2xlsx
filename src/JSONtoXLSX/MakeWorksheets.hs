@@ -1,13 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
-module MakeWorksheets
+module JSONtoXLSX.MakeWorksheets
   where
-import Codec.Xlsx
-import Codec.Xlsx.Formatted
-import Data.Map.Lazy (Map)
-import Control.Lens (set, (.~), (&))
-import JSONtoCellMap (jsonToFormattedCellMap)
-import           Data.Time.Clock.POSIX     (getPOSIXTime)
-import qualified Data.ByteString.Lazy      as L
+import           Codec.Xlsx
+import           Codec.Xlsx.Formatted
+import           Control.Lens             (set, (&), (.~))
+import qualified Data.ByteString.Lazy     as L
+import           Data.Map.Lazy            (Map)
+import           Data.Time.Clock.POSIX    (getPOSIXTime)
+import           JSONtoXLSX.JSONtoCellMap (jsonToFormattedCellMap)
 
 type FormattedCellMap = Map (Int, Int) FormattedCell
 

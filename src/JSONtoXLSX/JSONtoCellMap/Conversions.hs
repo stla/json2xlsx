@@ -1,19 +1,21 @@
 {-# LANGUAGE OverloadedStrings #-}
-module JSONtoCellMap.Internal
+module JSONtoXLSX.JSONtoCellMap.Conversions
   where
-import           Codec.Xlsx          (CellValue (..), Color (..), Comment (..),
-                                      Font (..), FontFamily (..),
-                                      ImpliedNumberFormat (..),
-                                      NumberFormat (..), XlsxText (..),
-                                      colorARGB, fontBold, fontColor,
-                                      fontFamily, fontName)
-import           ColorsRGB           (colorToARGB)
-import           Control.Lens        (set)
-import           Data.Aeson          (Value (..))
-import           Data.Maybe          (fromJust, isNothing)
-import           Data.Scientific     (toRealFloat)
-import           Data.Text           (Text)
-import           JSONtoCellMap.Types
+import           Codec.Xlsx                         (CellValue (..), Color (..),
+                                                     Comment (..), Font (..),
+                                                     FontFamily (..),
+                                                     ImpliedNumberFormat (..),
+                                                     NumberFormat (..),
+                                                     XlsxText (..), colorARGB,
+                                                     fontBold, fontColor,
+                                                     fontFamily, fontName)
+import           Control.Lens                       (set)
+import           Data.Aeson                         (Value (..))
+import           Data.Maybe                         (fromJust, isNothing)
+import           Data.Scientific                    (toRealFloat)
+import           Data.Text                          (Text)
+import           JSONtoXLSX.JSONtoCellMap.ColorsRGB (colorToARGB)
+import           JSONtoXLSX.JSONtoCellMap.Types
 
 valueToCellValue :: Value -> Maybe CellValue
 valueToCellValue value =
