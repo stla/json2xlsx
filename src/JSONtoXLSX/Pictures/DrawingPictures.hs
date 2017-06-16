@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 module JSONtoXLSX.Pictures.DrawingPictures
   where
 import           Codec.Xlsx
@@ -6,7 +5,8 @@ import           Control.Lens                    (set)
 -- import           Data.ByteString.Lazy (ByteString)
 -- import           Control.Monad         (zipWithM)
 import qualified Data.ByteString.Lazy            as B
-import           JSONtoXLSX.Pictures.PictureData (PictureData(..))
+import           Data.Text                       (pack)
+import           JSONtoXLSX.Pictures.PictureData (PictureData (..))
 import           System.FilePath.Posix           (takeFileName)
 
 defaultShapeProperties :: ShapeProperties
@@ -27,7 +27,7 @@ xdrAnchor pictureData = do
   let fileInfo = FileInfo
                  {
                    _fiFilename = show id ++ takeFileName imageFile,
-                   _fiContentType = "image/png",
+                   _fiContentType = pack "image/png",
                    _fiContents = image
                  }
       anchor = simpleAnchorXY (leftcorner, topcorner) (positiveSize2D cx cy) $
