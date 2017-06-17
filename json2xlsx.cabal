@@ -62,3 +62,6 @@ executable writexlsx
   build-depends:       base >= 4.7 && < 5
                      , json2xlsx
                      , optparse-applicative
+                     , bytestring
+                     , utf8-string
+                     , directory
