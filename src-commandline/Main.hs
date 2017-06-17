@@ -1,20 +1,20 @@
 module Main
   where
-import           Data.Monoid                   ((<>))
+import           Data.Monoid          ((<>))
 -- import qualified Data.Text                     as T
-import           Options.Applicative
+import qualified Data.ByteString      as B
 import           JSONtoXLSX
-import qualified Data.ByteString.Lazy       as BL
+import           Options.Applicative
 -- import qualified Data.ByteString.Lazy.Char8 as L
-import           Data.ByteString.Lazy.UTF8  (toString)
-import           System.Directory           (doesFileExist)
-import Data.Maybe
+import           Data.ByteString.UTF8 (toString)
+import           Data.Maybe
+import           System.Directory     (doesFileExist)
 
 getJSON :: String -> IO String
 getJSON json = do
   isFile <- doesFileExist json
   if isFile then
-    BL.readFile json >>= (return . toString)
+    B.readFile json >>= (return . toString)
   else return json
 
 data Arguments = Arguments
