@@ -29,7 +29,7 @@ jjj2 = "{\"A1\":{\"value\":3,\"format\":{\"numberFormat\":\"2Decimal\"}}}"
 jjj3 = "{\"A1\":{\"format\":{\"numberFormat\":\"2Decimal\"}}}" -- nope
 jjj4 = "{\"A1\":{\"value\":null,\"format\":{\"numberFormat\":\"2Decimal\"}}}"
 jjj5 = "{\"Sheet1\":{\"A1\":{\"value\":9,\"format\":{\"numberFormat\":\"2Decimal\"}}},\"Sheet2\":{\"A1\":{\"value\":2,\"format\":{\"numberFormat\":\"2Decimal\",\"font\":{\"bold\":true,\"color\":\"FF00FF00\"}}},\"B2\":{\"value\":1000,\"format\":{\"numberFormat\":\"yyyy-mm-dd;@\"}},\"A3\":{\"value\":\"abc\",\"format\":{\"font\":{\"family\":\"Script\",\"name\":\"Courier\"}}}}}"
-jjj6 = "{\"Sheet1\":{\"A1\":{\"value\":9,\"format\":{\"numberFormat\":\"2Decimal\",\"font\":{\"color\":\"green\"}},\"comment\":\"hi\"}}}"
+jjj6 = "{\"Sheet1\":{\"A1\":{\"value\":9,\"format\":{\"numberFormat\":\"2Decimal\",\"font\":{\"color\":\"green\"}},\"comment\":\"hé\"}}}"
 
 test5 = decode (fromString jjj5) :: Maybe (Map Text SimpleCellMap)
 

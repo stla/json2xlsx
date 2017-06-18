@@ -6,13 +6,15 @@ import           Codec.Xlsx.Formatted
 import           Control.Lens                    (set)
 import           Data.Aeson                      (decode)
 import qualified Data.ByteString.Lazy            as L
-import           Data.ByteString.Lazy.UTF8       (fromString)
+-- import           Data.ByteString.Lazy.UTF8       (fromString)
+-- import Data.ByteString.Lazy.Internal (packChars)
+import           Data.Text.Encoding              (encodeUtf8)
 -- import qualified Data.HashMap.Lazy         as DHM
 import           Data.Map.Lazy                   (Map)
 import qualified Data.Map.Lazy                   as M
 import           Data.Maybe                      (fromJust)
 -- import           Data.Text                 (Text)
-import           Data.Text                       (Text)
+import           Data.Text                       (Text, pack)
 import           Data.Time.Clock.POSIX           (getPOSIXTime)
 import qualified Data.Traversable                as T
 import           JSONtoXLSX.JSONtoCellMap        (jsonToFormattedCellMap, simpleCellMapToFormattedCellMap)
@@ -47,7 +49,7 @@ writeSingleWorksheet jsonString outfile = do
 writeXlsx :: String -> FilePath -> IO()
 writeXlsx jsonString outfile = do
   let jsonWorksheets = fromJust
-           (decode (fromString jsonString) :: Maybe (Map Text SimpleCellMap))
+           (decode ((L.fromStrict . encodeUtf8 . pack) jsonString) :: Maybe (Map Text SimpleCellMap))
       sheetnames = M.keys jsonWorksheets
       simplecellmaps = map snd $ M.toList jsonWorksheets
       fcellmaps = map simpleCellMapToFormattedCellMap simplecellmaps
@@ -61,9 +63,9 @@ writeXlsx jsonString outfile = do
 writeXlsx2 :: String -> String -> FilePath -> IO()
 writeXlsx2 jsonCells jsonImages outfile = do
   let sheets_cells = fromJust
-           (decode (fromString jsonCells) :: Maybe (Map Text SimpleCellMap))
+           (decode ((L.fromStrict . encodeUtf8 . pack) jsonCells) :: Maybe (Map Text SimpleCellMap))
       sheets_images = fromJust
-           (decode (fromString jsonImages) :: Maybe (Map Text [PictureData]))
+           (decode ((L.fromStrict . encodeUtf8 . pack) jsonImages) :: Maybe (Map Text [PictureData]))
       simplecellmaps = map snd $ M.toList sheets_cells
       fcellmaps = map simpleCellMapToFormattedCellMap simplecellmaps
       pictureDatas = map snd $ M.toList sheets_images
@@ -81,11 +83,11 @@ writeXlsx2 jsonCells jsonImages outfile = do
 writeXlsx3 :: String -> String -> FilePath -> IO()
 writeXlsx3 jsonCells jsonImages outfile = do
   let sheets_cells = fromJust
-           (decode (fromString jsonCells) :: Maybe (Map Text SimpleCellMap))
+           (decode ((L.fromStrict . encodeUtf8 . pack) jsonCells) :: Maybe (Map Text SimpleCellMap))
       -- Map Text FormattedCellMap
       sheets_fcells = M.map simpleCellMapToFormattedCellMap sheets_cells
       sheets_images = fromJust
-           (decode (fromString jsonImages) :: Maybe (Map Text [PictureData]))
+           (decode ((L.fromStrict . encodeUtf8 . pack) jsonImages) :: Maybe (Map Text [PictureData]))
   -- Map Text Drawing
   sheets_drawings <- T.mapM drawingPictures sheets_images
   -- merge => Map Text (FormattedCellMap, Maybe Drawing)
