@@ -6,6 +6,7 @@ import           Codec.Xlsx.Formatted
 import           Control.Lens                    (set)
 import           Data.Aeson                      (decode)
 import qualified Data.ByteString.Lazy            as L
+import qualified Data.ByteString.Internal as B
 -- import           Data.ByteString.Lazy.UTF8       (fromString)
 -- import Data.ByteString.Lazy.Internal (packChars)
 import           Data.Text.Encoding              (encodeUtf8)
@@ -88,6 +89,31 @@ writeXlsx3 jsonCells jsonImages outfile = do
       sheets_fcells = M.map simpleCellMapToFormattedCellMap sheets_cells
       sheets_images = fromJust
            (decode ((L.fromStrict . encodeUtf8 . pack) jsonImages) :: Maybe (Map Text [PictureData]))
+  -- Map Text Drawing
+  sheets_drawings <- T.mapM drawingPictures sheets_images
+  -- merge => Map Text (FormattedCellMap, Maybe Drawing)
+  let mergedMap = M.mergeWithKey
+                    (\k x y -> Just (x, Just y))
+                    (M.map (\x -> (x, Nothing)))
+                    (M.map (\y -> (M.empty, Just y)))
+                    sheets_fcells sheets_drawings
+      (stylesheet, worksheets) = makeWorksheets2 $ map snd $ M.toList mergedMap
+      sheetnames = M.keys mergedMap
+      namedWorksheets = zip sheetnames worksheets
+      xlsx = set xlStyles (renderStyleSheet stylesheet) $
+               set xlSheets namedWorksheets emptyXlsx
+  ct <- getPOSIXTime
+  L.writeFile outfile (fromXlsx ct xlsx)
+
+--
+writeXlsx4 :: B.ByteString -> B.ByteString -> FilePath -> IO()
+writeXlsx4 jsonCells jsonImages outfile = do
+  let sheets_cells = fromJust
+           (decode (L.fromStrict jsonCells) :: Maybe (Map Text SimpleCellMap))
+      -- Map Text FormattedCellMap
+      sheets_fcells = M.map simpleCellMapToFormattedCellMap sheets_cells
+      sheets_images = fromJust
+           (decode (L.fromStrict jsonImages) :: Maybe (Map Text [PictureData]))
   -- Map Text Drawing
   sheets_drawings <- T.mapM drawingPictures sheets_images
   -- merge => Map Text (FormattedCellMap, Maybe Drawing)
