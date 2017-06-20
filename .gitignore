@@ -1,4 +1,5 @@
 .stack-work/
+tests_exe/
 *.xlsx
 *.json
 *.png

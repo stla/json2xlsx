@@ -26,9 +26,11 @@ data Arguments = Arguments
 
 writeXLSX :: Arguments -> IO()
 writeXLSX (Arguments jsonCells jsonImages file) = do
-  let json1 = fromMaybe "{}" jsonCells
-      json2 = fromMaybe "{}" jsonImages
-  writeXlsx3 json1 json2 file
+  let _json1 = fromMaybe "{}" jsonCells
+      _json2 = fromMaybe "{}" jsonImages
+  json1 <- getJSON _json1
+  json2 <- getJSON _json2
+  writeXlsx5 json1 json2 file
 
 run :: Parser Arguments
 run = Arguments

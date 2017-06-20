@@ -154,3 +154,19 @@ writeXlsx5 jsonCells jsonImages outfile = do
                set xlSheets namedWorksheets emptyXlsx
   ct <- getPOSIXTime
   L.writeFile outfile (fromXlsx ct xlsx)
+
+-- conclusions pour utf8 :
+-- le 5 direct dans Haskell ou cmder ne marche pas - à vérifier
+-- il marhc avec DLL grâce à peekCAString
+-- le 4 avec dll ne marche dans R que si Âµ (obtenu avec iconv et toJSON)
+-- mais je ne l'ai pas essayé avec peekCAString
+-- le 3 marche direct et pour le exe dans R - exe peut-être que avec toJSON -- à vérifier
+-- je n'ai pas essayé DLL+3 avec peekCAString
+
+-- VéRIFICATIONS:
+-- le 3 et le 5 marchent bien dans Haskell avec un µ
+-- writexlsx (qui utilise writeXlsx3) marche dans cmd
+-- le exe dans R (json2xlsx2) a bien marché sans passer par jsonlite
+
+-- CONCLUSIONS:
+-- je ne comprends plus ce qui ne marchait pas avec 5
