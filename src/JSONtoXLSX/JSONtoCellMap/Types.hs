@@ -56,17 +56,18 @@ emptySimpleFormat = SimpleFormat
                       numberFormat = Nothing,
                       font         = Nothing
                     }
--- TODO
+
 data CellComment = CellComment
                    {
                     text :: Text,
                     author :: Maybe Text
                    }
+                  deriving (Show, Generic, FromJSON)
 
 data SimpleCell = SimpleCell {
                              value   :: Value,
                              format  :: Maybe SimpleFormat,
-                             comment :: Maybe Text
+                             comment :: Maybe CellComment
                            }
        deriving (Show, Generic, FromJSON)
 

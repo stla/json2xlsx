@@ -95,16 +95,16 @@ simpleFontToFont sfont =
   --   where font = maybe (Just emptyFont) (\x -> Just (set fontBold (bold x) emptyFont)) sfont
   --         ffamily = maybe Nothing family sfont
 
-textToComment :: Maybe Text -> Maybe Comment
-textToComment comment
-  | isNothing comment = Nothing
-  | otherwise = Just Comment
-                  {
-                    _commentText = XlsxText (fromJust comment),
-                    _commentAuthor = "xlsx",
-                    _commentVisible = False
-                  }
---
+-- textToComment :: Maybe Text -> Maybe Comment
+-- textToComment comment
+--   | isNothing comment = Nothing
+--   | otherwise = Just Comment
+--                   {
+--                     _commentText = XlsxText (fromJust comment),
+--                     _commentAuthor = "xlsx",
+--                     _commentVisible = False
+--                   }
+
 cellCommentToComment :: Maybe CellComment -> Maybe Comment
 cellCommentToComment cellcomment
   | isNothing cellcomment = Nothing

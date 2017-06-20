@@ -53,7 +53,7 @@ import           Data.Maybe                           (fromJust, fromMaybe)
 simpleCellToFormattedCell :: SimpleCell -> FormattedCell
 simpleCellToFormattedCell scell =
   set formattedCell cell (set formattedFormat f emptyFormattedCell)
-  where cell = set cellComment (textToComment (comment scell)) $
+  where cell = set cellComment (cellCommentToComment (comment scell)) $
                 set cellValue (valueToCellValue (value scell)) emptyCell
         f = if formatscell == emptySimpleFormat
               then
