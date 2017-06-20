@@ -2,7 +2,6 @@ module JSONtoXLSX.Pictures.DrawingPictures
   where
 import           Codec.Xlsx
 import           Control.Lens                    (set)
--- import           Data.ByteString.Lazy (ByteString)
 -- import           Control.Monad         (zipWithM)
 import qualified Data.ByteString                 as SB
 import qualified Data.ByteString.Lazy            as LB

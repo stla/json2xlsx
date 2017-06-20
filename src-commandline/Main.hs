@@ -1,11 +1,9 @@
 module Main
   where
 import           Data.Monoid          ((<>))
--- import qualified Data.Text                     as T
 import qualified Data.ByteString      as B
 import           JSONtoXLSX
 import           Options.Applicative
--- import qualified Data.ByteString.Lazy.Char8 as L
 import           Data.ByteString.UTF8 (toString)
 import           Data.Maybe
 import           System.Directory     (doesFileExist)

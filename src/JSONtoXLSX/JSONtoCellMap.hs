@@ -5,8 +5,6 @@ import           Codec.Xlsx.Formatted
 import           JSONtoXLSX.JSONtoCellMap.Conversions
 import           JSONtoXLSX.JSONtoCellMap.Types
 import           Control.Lens                         (set)
-import           Data.Aeson                           (decode)
-import           Data.ByteString.Lazy.UTF8            (fromString)
 import qualified Data.HashMap.Lazy                    as HM
 import qualified Data.Map.Lazy                        as M
 import           Data.Maybe                           (fromJust, fromMaybe)
@@ -72,8 +70,3 @@ simpleCellMapToFormattedCellMap simplecellmap =
   M.map simpleCellToFormattedCell $
     M.mapKeys (\c -> fromJust $ fromSingleCellRef CellRef {unCellRef = c}) $
       M.fromList $ HM.toList simplecellmap
-
-jsonToFormattedCellMap :: String -> FormattedCellMap
-jsonToFormattedCellMap jsonString =
-  simpleCellMapToFormattedCellMap $
-        fromJust (decode (fromString jsonString) :: Maybe SimpleCellMap)
