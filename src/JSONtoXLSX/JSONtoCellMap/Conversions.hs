@@ -11,7 +11,8 @@ import           Codec.Xlsx                         (CellValue (..), Color (..),
                                                      fontFamily, fontName)
 import           Control.Lens                       (set)
 import           Data.Aeson                         (Value (..))
-import           Data.Maybe                         (fromJust, isNothing)
+import           Data.Maybe                         (fromJust, fromMaybe,
+                                                     isNothing)
 import           Data.Scientific                    (toRealFloat)
 import           Data.Text                          (Text)
 import           JSONtoXLSX.JSONtoCellMap.ColorsRGB (colorToARGB)
@@ -101,5 +102,16 @@ textToComment comment
                   {
                     _commentText = XlsxText (fromJust comment),
                     _commentAuthor = "xlsx",
+                    _commentVisible = False
+                  }
+--
+cellCommentToComment :: Maybe CellComment -> Maybe Comment
+cellCommentToComment cellcomment
+  | isNothing cellcomment = Nothing
+  | otherwise = Just Comment
+                  {
+                    _commentText = XlsxText (text $ fromJust cellcomment),
+                    _commentAuthor =
+                      fromMaybe "someone" (author $ fromJust cellcomment),
                     _commentVisible = False
                   }

@@ -56,6 +56,12 @@ emptySimpleFormat = SimpleFormat
                       numberFormat = Nothing,
                       font         = Nothing
                     }
+-- TODO
+data CellComment = CellComment
+                   {
+                    text :: Text,
+                    author :: Maybe Text
+                   }
 
 data SimpleCell = SimpleCell {
                              value   :: Value,
