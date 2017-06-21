@@ -16,7 +16,7 @@ import JSONtoXLSX
 -- import           Data.Text                       (Text)
 
 jjj, jjpics :: String
-jjj = "{\"Sheet1\":{\"A1\":{\"value\":2,\"comment\":{\"text\":\"hé\"},\"format\":{\"numberFormat\":\"2Decimal\",\"font\":{\"bold\":true}}},\"B2\":{\"value\":1000,\"comment\":{\"text\":\"a\",\"author\":\"John\"},\"format\":{\"numberFormat\":\"yyyy-mm-dd;@\"}},\"A3\":{\"value\":\"µ\",\"format\":{\"font\":{\"family\":\"Script\",\"name\":\"Courier\"}}}}}"
+jjj = "{\"Sheet1\":{\"A1\":{\"value\":2,\"comment\":{\"text\":\"hé\"},\"format\":{\"numberFormat\":\"2Decimal\",\"fill\":\"yellow\",\"font\":{\"bold\":true}}},\"B2\":{\"value\":1000,\"comment\":{\"text\":\"a\",\"author\":\"John\"},\"format\":{\"numberFormat\":\"yyyy-mm-dd;@\"}},\"A3\":{\"value\":\"µ\",\"format\":{\"font\":{\"family\":\"Script\",\"name\":\"Courier\"}}}}}"
 jjpics = "{\"Sheet2\":[{\"file\":\"image.png\",\"left\":2,\"top\":3,\"width\":200,\"height\":300},{\"file\":\"image2.png\",\"left\":12,\"top\":3,\"width\":200,\"height\":300}]}"
 
 test5 :: IO()

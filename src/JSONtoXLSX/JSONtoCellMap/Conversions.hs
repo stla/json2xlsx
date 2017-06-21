@@ -2,10 +2,12 @@
 module JSONtoXLSX.JSONtoCellMap.Conversions
   where
 import           Codec.Xlsx                         (CellValue (..), Color (..),
-                                                     Comment (..), Font (..),
-                                                     FontFamily (..),
+                                                     Comment (..), Fill (..),
+                                                     FillPattern (..),
+                                                     Font (..), FontFamily (..),
                                                      ImpliedNumberFormat (..),
                                                      NumberFormat (..),
+                                                     PatternType (..),
                                                      XlsxText (..), colorARGB,
                                                      fontBold, fontColor,
                                                      fontFamily, fontName)
@@ -75,6 +77,20 @@ textToColor :: Maybe Text -> Maybe Color
 textToColor color
   | isNothing color = Nothing
   | otherwise = Just $ set colorARGB (fmap colorToARGB color) emptyColor
+
+textToFill :: Maybe Text -> Maybe Fill
+textToFill color
+  | isNothing color = Nothing
+  | otherwise = Just Fill {
+                           _fillPattern =
+                             Just FillPattern {
+                                               _fillPatternBgColor = argb,
+                                               _fillPatternFgColor = argb,
+                                               _fillPatternType =
+                                                  Just PatternTypeSolid
+                                              }
+                          }
+    where argb = textToColor color
 
 simpleFontToFont :: Maybe SimpleFont -> Maybe Font
 simpleFontToFont sfont =

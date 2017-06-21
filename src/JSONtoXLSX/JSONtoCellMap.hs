@@ -59,6 +59,7 @@ simpleCellToFormattedCell scell =
               then
                 emptyFormat
               else
+                set formatFill (textToFill $ fill formatscell) $ 
                 set formatFont (simpleFontToFont $ font formatscell) $
                 set formatNumberFormat
                   (textToNumberFormat (numberFormat formatscell))

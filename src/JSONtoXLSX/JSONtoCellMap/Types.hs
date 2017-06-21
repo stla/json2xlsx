@@ -29,7 +29,8 @@ emptyColor = def
 
 data SimpleFormat = SimpleFormat {
                                     numberFormat :: Maybe Text,
-                                    font         :: Maybe SimpleFont
+                                    font         :: Maybe SimpleFont,
+                                    fill         :: Maybe Text
                                  }
                     deriving (Show, Generic, FromJSON, Eq)
 
@@ -54,7 +55,8 @@ emptySimpleFormat :: SimpleFormat
 emptySimpleFormat = SimpleFormat
                     {
                       numberFormat = Nothing,
-                      font         = Nothing
+                      font         = Nothing,
+                      fill         = Nothing
                     }
 
 data CellComment = CellComment
