@@ -52,14 +52,19 @@ import           Data.Maybe                           (fromJust, fromMaybe)
 
 simpleCellToFormattedCell :: SimpleCell -> FormattedCell
 simpleCellToFormattedCell scell =
-  set formattedCell cell (set formattedFormat f emptyFormattedCell)
+  set formattedColSpan cs $
+  set formattedRowSpan rs $
+  set formattedCell cell $
+    set formattedFormat f emptyFormattedCell
   where cell = set cellComment (cellCommentToComment (comment scell)) $
                 set cellValue (valueToCellValue (value scell)) emptyCell
+        cs = fromMaybe 1 (colspan scell)
+        rs = fromMaybe 1 (rowspan scell)
         f = if formatscell == emptySimpleFormat
               then
                 emptyFormat
               else
-                set formatFill (textToFill $ fill formatscell) $ 
+                set formatFill (textToFill $ fill formatscell) $
                 set formatFont (simpleFontToFont $ font formatscell) $
                 set formatNumberFormat
                   (textToNumberFormat (numberFormat formatscell))

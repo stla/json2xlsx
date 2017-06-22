@@ -69,7 +69,9 @@ data CellComment = CellComment
 data SimpleCell = SimpleCell {
                              value   :: Value,
                              format  :: Maybe SimpleFormat,
-                             comment :: Maybe CellComment
+                             comment :: Maybe CellComment,
+                             colspan :: Maybe Int,
+                             rowspan :: Maybe Int
                            }
        deriving (Show, Generic, FromJSON)
 
