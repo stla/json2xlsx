@@ -19,7 +19,7 @@ sheetProtection password =
               , _sprDeleteColumns = True
               , _sprDeleteRows = True
               , _sprFormatCells = True
-              , _sprFormatColumns = True
+              , _sprFormatColumns = False
               , _sprFormatRows = True
               , _sprInsertColumns = True
               , _sprInsertHyperlinks = True
@@ -28,6 +28,6 @@ sheetProtection password =
               , _sprPivotTables = True
               , _sprScenarios = True
               , _sprSelectLockedCells = False
-              , _sprSelectUnlockedCells = True
+              , _sprSelectUnlockedCells = False
               , _sprSort = True
               }

@@ -108,7 +108,7 @@ writeXlsx6 jsonCells jsonImages jsonPasswords outfile = do
   let mergedMap = M.mergeWithKey
                     (\k x y -> Just (x, Just y))
                     (M.map (\x -> (x, Nothing)))
-                    (M.map (\y -> ((M.empty,Nothing), Just y)))
+                    (M.map (\y -> ((M.empty, Nothing), Just y)))
                     (M.mergeWithKey
                       (\k x y -> Just (x, Just y))
                       (M.map (\x -> (x, Nothing)))
