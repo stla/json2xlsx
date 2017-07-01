@@ -5,6 +5,8 @@ import           Codec.Xlsx
 import           Codec.Xlsx.Formatted
 import           Control.Lens             ((&), (.~))
 import           Data.Map.Lazy            (Map)
+import JSONtoXLSX.SheetProtection
+import Data.Text (Text)
 
 type FormattedCellMap = Map (Int, Int) FormattedCell
 
@@ -26,4 +28,17 @@ makeWorksheets =
            ws = def & wsCells   .~ formattedCellMap fmt
                     & wsMerges  .~ formattedMerges fmt
                     & wsDrawing .~ drawing
+       in (formattedStyleSheet fmt, ws : wss)
+--
+makeWorksheets2 :: [((FormattedCellMap, Maybe Drawing), Maybe Text)] ->
+                                                       (StyleSheet, [Worksheet])
+makeWorksheets2 =
+  foldr formatSingle (minimalStyleSheet, [])
+  where
+    formatSingle ((fcells, drawing), password) (ssheet, wss) =
+       let fmt = formatted fcells ssheet
+           ws = def & wsCells   .~ formattedCellMap fmt
+                    & wsMerges  .~ formattedMerges fmt
+                    & wsDrawing .~ drawing
+                    & wsProtection .~ sheetProtection password
        in (formattedStyleSheet fmt, ws : wss)

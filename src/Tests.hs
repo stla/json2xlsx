@@ -21,3 +21,6 @@ jjpics = "{\"Sheet2\":[{\"file\":\"image.png\",\"left\":2,\"top\":3,\"width\":20
 
 test5 :: IO()
 test5 = writeXlsx5 jjj jjpics "test5.xlsx"
+
+test6 :: IO()
+test6 = writeXlsx6 jjj jjpics "{\"Sheet1\":\"pwd\"}" "test6.xlsx"

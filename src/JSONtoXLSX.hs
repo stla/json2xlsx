@@ -19,7 +19,7 @@ import           Data.Time.Clock.POSIX           (getPOSIXTime)
 import qualified Data.Traversable                as T
 import           JSONtoXLSX.JSONtoCellMap        (simpleCellMapToFormattedCellMap)
 import           JSONtoXLSX.JSONtoCellMap.Types  (SimpleCellMap)
-import           JSONtoXLSX.MakeWorksheets       (makeWorksheets)
+import           JSONtoXLSX.MakeWorksheets       (makeWorksheets, makeWorksheets2)
 import           JSONtoXLSX.Pictures             (drawingPictures)
 import           JSONtoXLSX.Pictures.PictureData (PictureData (..))
 
@@ -55,7 +55,7 @@ writeXlsx5 :: String -> String -> FilePath -> IO()
 writeXlsx5 jsonCells jsonImages outfile = do
   let sheets_cells = fromJust
            (decode (fromString jsonCells) :: Maybe (Map Text SimpleCellMap))
-      -- Map Text FormattedCellMap
+      -- sheets_fcells :: Map Text FormattedCellMap
       sheets_fcells = M.map simpleCellMapToFormattedCellMap sheets_cells
       sheets_images = fromJust
            (decode (fromString jsonImages) :: Maybe (Map Text [PictureData]))
@@ -90,3 +90,35 @@ writeXlsx5 jsonCells jsonImages outfile = do
 
 -- CONCLUSIONS:
 -- je ne comprends plus ce qui ne marchait pas avec 5
+
+--
+writeXlsx6 :: String -> String -> String -> FilePath -> IO()
+writeXlsx6 jsonCells jsonImages jsonPasswords outfile = do
+  let sheets_cells = fromJust
+           (decode (fromString jsonCells) :: Maybe (Map Text SimpleCellMap))
+      -- sheets_fcells :: Map Text FormattedCellMap
+      sheets_fcells = M.map simpleCellMapToFormattedCellMap sheets_cells
+      sheets_images = fromJust
+           (decode (fromString jsonImages) :: Maybe (Map Text [PictureData]))
+      sheets_passwords = fromJust
+           (decode (fromString jsonPasswords) :: Maybe (Map Text Text))
+  -- Map Text Drawing
+  sheets_drawings <- T.mapM drawingPictures sheets_images
+  -- merge => Map Text (FormattedCellMap, Maybe Drawing)
+  let mergedMap = M.mergeWithKey
+                    (\k x y -> Just (x, Just y))
+                    (M.map (\x -> (x, Nothing)))
+                    (M.map (\y -> ((M.empty,Nothing), Just y)))
+                    (M.mergeWithKey
+                      (\k x y -> Just (x, Just y))
+                      (M.map (\x -> (x, Nothing)))
+                      (M.map (\y -> (M.empty, Just y)))
+                      sheets_fcells sheets_drawings)
+                    sheets_passwords
+      (stylesheet, worksheets) = makeWorksheets2 $ map snd $ M.toList mergedMap
+      sheetnames = M.keys mergedMap
+      namedWorksheets = zip sheetnames worksheets
+      xlsx = set xlStyles (renderStyleSheet stylesheet) $
+               set xlSheets namedWorksheets emptyXlsx
+  ct <- getPOSIXTime
+  L.writeFile outfile (fromXlsx ct xlsx)
