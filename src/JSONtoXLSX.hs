@@ -19,8 +19,7 @@ import           Data.Time.Clock.POSIX           (getPOSIXTime)
 import qualified Data.Traversable                as T
 import           JSONtoXLSX.JSONtoCellMap        (simpleCellMapToFormattedCellMap)
 import           JSONtoXLSX.JSONtoCellMap.Types  (SimpleCellMap)
-import           JSONtoXLSX.MakeWorksheets       (makeWorksheets,
-                                                  makeWorksheets2)
+import           JSONtoXLSX.MakeWorksheets       (makeWorksheets)
 import           JSONtoXLSX.Pictures             (drawingPictures)
 import           JSONtoXLSX.Pictures.PictureData (PictureData (..))
 
@@ -52,29 +51,29 @@ emptyXlsx = def
 --   L.writeFile outfile (fromXlsx ct xlsx)
 
 
-writeXlsx5 :: String -> String -> FilePath -> IO()
-writeXlsx5 jsonCells jsonImages outfile = do
-  let sheets_cells = fromJust
-           (decode (fromString jsonCells) :: Maybe (Map Text SimpleCellMap))
-      -- sheets_fcells :: Map Text FormattedCellMap
-      sheets_fcells = M.map simpleCellMapToFormattedCellMap sheets_cells
-      sheets_images = fromJust
-           (decode (fromString jsonImages) :: Maybe (Map Text [PictureData]))
-  -- Map Text Drawing
-  sheets_drawings <- T.mapM drawingPictures sheets_images
-  -- merge => Map Text (FormattedCellMap, Maybe Drawing)
-  let mergedMap = M.mergeWithKey
-                    (\k x y -> Just (x, Just y))
-                    (M.map (\x -> (x, Nothing)))
-                    (M.map (\y -> (M.empty, Just y)))
-                    sheets_fcells sheets_drawings
-      (stylesheet, worksheets) = makeWorksheets $ map snd $ M.toList mergedMap
-      sheetnames = M.keys mergedMap
-      namedWorksheets = zip sheetnames worksheets
-      xlsx = set xlStyles (renderStyleSheet stylesheet) $
-               set xlSheets namedWorksheets emptyXlsx
-  ct <- getPOSIXTime
-  L.writeFile outfile (fromXlsx ct xlsx)
+-- writeXlsx5 :: String -> String -> FilePath -> IO()
+-- writeXlsx5 jsonCells jsonImages outfile = do
+--   let sheets_cells = fromJust
+--            (decode (fromString jsonCells) :: Maybe (Map Text SimpleCellMap))
+--       -- sheets_fcells :: Map Text FormattedCellMap
+--       sheets_fcells = M.map simpleCellMapToFormattedCellMap sheets_cells
+--       sheets_images = fromJust
+--            (decode (fromString jsonImages) :: Maybe (Map Text [PictureData]))
+--   -- Map Text Drawing
+--   sheets_drawings <- T.mapM drawingPictures sheets_images
+--   -- merge => Map Text (FormattedCellMap, Maybe Drawing)
+--   let mergedMap = M.mergeWithKey
+--                     (\k x y -> Just (x, Just y))
+--                     (M.map (\x -> (x, Nothing)))
+--                     (M.map (\y -> (M.empty, Just y)))
+--                     sheets_fcells sheets_drawings
+--       (stylesheet, worksheets) = makeWorksheets $ map snd $ M.toList mergedMap
+--       sheetnames = M.keys mergedMap
+--       namedWorksheets = zip sheetnames worksheets
+--       xlsx = set xlStyles (renderStyleSheet stylesheet) $
+--                set xlSheets namedWorksheets emptyXlsx
+--   ct <- getPOSIXTime
+--   L.writeFile outfile (fromXlsx ct xlsx)
 
 -- conclusions pour utf8 :
 -- le 5 direct dans Haskell ou cmder ne marche pas - à vérifier
@@ -103,9 +102,10 @@ writeXlsx6 jsonCells jsonImages jsonPasswords outfile = do
            (decode (fromString jsonImages) :: Maybe (Map Text [PictureData]))
       sheets_passwords = fromJust
            (decode (fromString jsonPasswords) :: Maybe (Map Text Text))
-  -- Map Text Drawing
+  -- sheets_drawings :: Map Text Drawing
   sheets_drawings <- T.mapM drawingPictures sheets_images
-  -- merge => Map Text (FormattedCellMap, Maybe Drawing)
+  -- merge 1 => Map Text (FormattedCellMap, Maybe Drawing)
+  -- merge 2 => Map Text ((FormattedCellMap, Maybe Drawing), Maybe Text)
   let mergedMap = M.mergeWithKey
                     (\k x y -> Just (x, Just y))
                     (M.map (\x -> (x, Nothing)))
@@ -116,7 +116,7 @@ writeXlsx6 jsonCells jsonImages jsonPasswords outfile = do
                       (M.map (\y -> (M.empty, Just y)))
                       sheets_fcells sheets_drawings)
                     sheets_passwords
-      (stylesheet, worksheets) = makeWorksheets2 $ map snd $ M.toList mergedMap
+      (stylesheet, worksheets) = makeWorksheets $ map snd $ M.toList mergedMap
       sheetnames = M.keys mergedMap
       namedWorksheets = zip sheetnames worksheets
       xlsx = set xlStyles (renderStyleSheet stylesheet) $

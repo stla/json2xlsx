@@ -17,18 +17,21 @@ getJSON json = do
 
 data Arguments = Arguments
   {
-    jsonCells  :: Maybe String
-  , jsonImages :: Maybe String
-  , file       :: FilePath
+    jsonCells     :: Maybe String
+  , jsonImages    :: Maybe String
+  , jsonPasswords :: Maybe String
+  , file          :: FilePath
   }
 
 writeXLSX :: Arguments -> IO()
-writeXLSX (Arguments jsonCells jsonImages file) = do
+writeXLSX (Arguments jsonCells jsonImages jsonPasswords file) = do
   let _json1 = fromMaybe "{}" jsonCells
       _json2 = fromMaybe "{}" jsonImages
+      _json3 = fromMaybe "{}" jsonPasswords
   json1 <- getJSON _json1
   json2 <- getJSON _json2
-  writeXlsx5 json1 json2 file
+  json3 <- getJSON _json3
+  writeXlsx6 json1 json2 json3 file
 
 run :: Parser Arguments
 run = Arguments
@@ -40,6 +43,10 @@ run = Arguments
            ( long "images"
           <> short 'i'
           <> help "JSON string for images" ))
+     <*> optional (strOption
+           ( long "passwords"
+          <> short 'p'
+          <> help "JSON string for passwords" ))
      <*> strOption
            ( long "output"
           <> short 'o'

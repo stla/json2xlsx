@@ -19,20 +19,20 @@ type FormattedCellMap = Map (Int, Int) FormattedCell
 --                     & wsMerges .~ formattedMerges fmt
 --        in (formattedStyleSheet fmt, ws : wss)
 
-makeWorksheets :: [(FormattedCellMap, Maybe Drawing)] -> (StyleSheet, [Worksheet])
-makeWorksheets =
-  foldr formatSingle (minimalStyleSheet, [])
-  where
-    formatSingle (fcells, drawing) (ssheet, wss) =
-       let fmt = formatted fcells ssheet
-           ws = def & wsCells   .~ formattedCellMap fmt
-                    & wsMerges  .~ formattedMerges fmt
-                    & wsDrawing .~ drawing
-       in (formattedStyleSheet fmt, ws : wss)
+-- makeWorksheets :: [(FormattedCellMap, Maybe Drawing)] -> (StyleSheet, [Worksheet])
+-- makeWorksheets =
+--   foldr formatSingle (minimalStyleSheet, [])
+--   where
+--     formatSingle (fcells, drawing) (ssheet, wss) =
+--        let fmt = formatted fcells ssheet
+--            ws = def & wsCells   .~ formattedCellMap fmt
+--                     & wsMerges  .~ formattedMerges fmt
+--                     & wsDrawing .~ drawing
+--        in (formattedStyleSheet fmt, ws : wss)
 --
-makeWorksheets2 :: [((FormattedCellMap, Maybe Drawing), Maybe Text)] ->
+makeWorksheets :: [((FormattedCellMap, Maybe Drawing), Maybe Text)] ->
                                                        (StyleSheet, [Worksheet])
-makeWorksheets2 =
+makeWorksheets =
   foldr formatSingle (minimalStyleSheet, [])
   where
     formatSingle ((fcells, drawing), password) (ssheet, wss) =
