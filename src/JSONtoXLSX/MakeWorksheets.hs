@@ -3,10 +3,10 @@ module JSONtoXLSX.MakeWorksheets
   where
 import           Codec.Xlsx
 import           Codec.Xlsx.Formatted
-import           Control.Lens             ((&), (.~))
-import           Data.Map.Lazy            (Map)
-import JSONtoXLSX.SheetProtection
-import Data.Text (Text)
+import           Control.Lens               ((&), (.~))
+import           Data.Map.Lazy              (Map)
+import           Data.Text                  (Text)
+import           JSONtoXLSX.SheetProtection
 
 type FormattedCellMap = Map (Int, Int) FormattedCell
 

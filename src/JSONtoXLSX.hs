@@ -19,7 +19,8 @@ import           Data.Time.Clock.POSIX           (getPOSIXTime)
 import qualified Data.Traversable                as T
 import           JSONtoXLSX.JSONtoCellMap        (simpleCellMapToFormattedCellMap)
 import           JSONtoXLSX.JSONtoCellMap.Types  (SimpleCellMap)
-import           JSONtoXLSX.MakeWorksheets       (makeWorksheets, makeWorksheets2)
+import           JSONtoXLSX.MakeWorksheets       (makeWorksheets,
+                                                  makeWorksheets2)
 import           JSONtoXLSX.Pictures             (drawingPictures)
 import           JSONtoXLSX.Pictures.PictureData (PictureData (..))
 
