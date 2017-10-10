@@ -11,7 +11,7 @@ copyright:           2017 Stéphane Laurent
 category:            Spreadsheet
 build-type:          Simple
 extra-source-files:  README.md
-cabal-version:       >=1.10
+cabal-version:       >=2.0
 
 source-repository head
   type:     git
@@ -66,3 +66,21 @@ executable writexlsx
                      , bytestring
                      , utf8-string
                      , directory
+
+foreign-library json2xlsx
+  lib-version-info:    6:3:2
+  if flag(dll)
+    buildable:         True
+  else
+    buildable:         False
+  type:                native-shared
+  if os(Windows)
+    options:           standalone
+    mod-def-file:      src-dll/json2xlsx.def
+  hs-source-dirs:      src-dll
+  other-modules:       Export
+  build-depends:       base >= 4.7 && < 5.0
+                     , json2xlsx
+  c-sources:           src-dll/StartEnd.c
+  default-language:    Haskell2010
+  extensions:          ForeignFunctionInterface
